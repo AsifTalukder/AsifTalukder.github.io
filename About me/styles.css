@@ -1,0 +1,142 @@
+/* Color
+ #F7FFF7 - almost white
+ #343434 - dark gray - almost black
+ #2F3061 - blue dark
+ #FFE66D - Yellow
+ #A1c6D7 - blue light
+ */
+
+
+
+/* Global styles
+----------------------------- ------ */
+html{
+    box-sizing: border-box;
+}
+*, *:before, *:after{
+    box-sizing: inherit;
+}
+
+body{
+    color: darkgray;
+    margin: 0;
+    padding: 0;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+img{
+    height: 100px;
+    width: 150px;
+}
+a{
+    color: purple;
+}
+a:hover{
+    text-decoration:none ;
+}
+h1,h2{
+    font-family: "Arial Hebrew", cursive;
+}
+h1{
+    font-size: 70px;
+}
+h2{
+    margin: 0;
+    font-size: 45px;
+}
+.content-wrap{
+    width: 900px;
+    margin: 0 auto;
+    padding: 64px 0;
+}
+h3 + p{
+    font-style: italic;
+}
+h3 ~ p{
+    margin: 0;
+}
+.skills{
+    font-size: large;
+    font-weight: bold;
+}
+
+/* Profile
+---------------------------------- */
+header{
+    background-image: url("images/background_edu.jpg");
+    background-size: cover;
+    color: whitesmoke;
+}
+
+/* Projects
+---------------------------------- */
+.project{
+    background: azure;
+    color: black;
+}
+.project a{
+    color: darkblue;
+}
+.project .btn{
+    color: whitesmoke;
+    background: darkblue;
+    text-decoration: none;
+    padding: 8px;
+    border-radius: 4px;
+    display: inline-block;
+}
+.project .btn:hover{
+    background: rgba(47,48,97,80);
+}
+.project-item{
+    overflow: hidden;
+    border-bottom: 1px dashed darkgray;
+    padding-bottom: 40px;
+}
+.project-item img{
+    float: left;
+    margin-right: 20px;
+}
+
+
+/* work experience
+---------------------------------- */
+.work-experience{
+    background: lightblue;
+    color: black;
+}
+.job-item{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    column-gap: 20px;
+}
+
+/* Educations
+---------------------------------- */
+.education{
+    background-image: url("images/background_2.jpg");
+    background-size: cover;
+    color: darkolivegreen;
+}
+
+/* contact info
+---------------------------------- */
+footer{
+    background: slategrey;
+   color: whitesmoke;
+
+}
+footer a{
+    text-decoration: none;
+    background: gold;
+    padding: 5px;
+    border-radius: 2px;
+
+}
+footer a:hover{
+    background: steelblue;
+}
+footer h2{
+    font-size: 30px;
+}
