@@ -1,43 +1,35 @@
 var express = require('express');
-var bodyParser = require('body-parser');
-var urlencoded = bodyParser.urlencoded({extended:false})
-
 var app = express();
+
+app.use(function(req, res, next) {
+  console.log(req.method + " " + req.path + " - " + req.ip)
+  next();
+});
 
 console.log("Hello World");
 
+/*app.get("/", (req, res) => {
+  res.send("Hello Express");
+});*/
 
 app.get("/", function(req, res) {
-  res.send("Hello Express");
-});
-
-
-app.get("/", function(req, res){
   res.sendFile(__dirname + "/views/index.html");
 });
 
 app.use(express.static(__dirname + "/public/style.css"));
 
-app.get("/json", (req, res) => {
-  res.json({
-    "message": "Hello json"
-  });
-});
+app.use("/public", express.static(__dirname + "/public"));
 
 app.get("/json", (req, res) => {
-  var response = "Hello World".toUpperCase();
+  var response = { "message": "Hello json" };
+  //var response = "Hello json".toUpperCase();
 
-  if (process.env.VAR_NAME === "allCaps"){
-    response = "Hello World".toUpperCase();
-
-  }else{
-    response = "Hello World";
+  if (process.env.MESSAGE_STYLE === "uppercase") {
+    response.message = response.message.toUpperCase();
+  } else {
+    res.json(response);
   }
-  res.json({
-    "message": response,
-  });
 });
-
 app.use(function middleware(req, res, next){
   var string = req.method+" "+req.path+"_" + req.ip;
   console.log(string);
@@ -82,7 +74,6 @@ app.post("/name", function(req, res){
   var string = req.body.first+" "+req.body.last;
   res.json({name: string});
 });
-
 
 
 
