@@ -4,30 +4,99 @@
     <meta charset="UTF-8">
     <title>CS 355 Homepage</title>
     <style>
-        body{
-            background-color:lightblue;
-        }
-        h1{
-            color:navy;
-            font-family:Georgia, 'Times New Roman', Times, serif;
+       body{
+    background-color: lightyellow;
+}
+h1{
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    text-align: center;
+}
+h2{
+    text-align: center;
+    
+}
+
+.nav {
+    display: flex;
+    background-color:lightseagreen;
+}
+
+.nav a {
+    font-size: 20px;
+    text-align: center;
+    color: white;
+    float:left;
+    text-decoration: none;
+    padding: 10px 97.7px;
+    
+}
+.about-me p{
+    font-style: italic;
+}
+
+.nav a:hover {
+    background-color:slategray;
+    color: black;
+}
+
+.home-nav{
+    background-color: black;
+}
+.footer a{
+    text-decoration: none;
+    background: gold;
+    padding: 5px;
+    border-radius: 2px;
+
+}
+.footer a:hover{
+    background: lightseagreen;
+}
+.footer h2{
+    text-align: left;
+}
+
+
             
-        }
+        
     </style>
 </head>
 <body>
-     <h1>Asif Talukder</h1>
-     <h2>This is my homepage for CS 355</h2>
+     <h1>CSCI 355 Dashboard</h1>
+     <div class = "nav">
+        <a class = "home-nav" href = "index.html">Home</a>
+        <a class = "project-nav" href = "/dashboard-html/projects.html">Projects</a> 
+       
+     </div>
+     <h2>Asif Talukder</h2>
 
-     <h3>My projects:</h3>
-     <a href="About me/index.html">My Resume</a> </br>
-     <a href="Chalkboard/login.html">Term Project: Chalkboard</a> </br>
-     <a href="https://boilerplate-npm.asiftalukder.repl.co">Basic Node and Express</a> </br>
-     <a href="https://boilerplate-express.asiftalukder.repl.co">Back End Dev & API</a> </br>
-     <a href="https://boilerplate-mongomongoose-1.asiftalukder.repl.co">MongoDB & Mongoose</a> </br>
-     <a href="https://boilerplate-project-timestamp.asiftalukder.repl.co">Timestamp Microservice</a></br>
-     <a href= "https://boilerplate-project-headerparser.asiftalukder.repl.co"> Request Header Parser Microservice</a> </br>
-     <a href= "https://boilerplate-project-filemetadata.asiftalukder.repl.co"> File Metadata Microservice</a>
-     <a href="/weatherApp/weather.html"> weatherApp</a>
+    <div class="about-me">
+        <h3>Welcome to my course website for CSCI 355!</h3>
+        <h4>Course Details:</h4>
+        <p><strong>Course Name:</strong> Internet and Web Technology</p>
+        <p><strong>Course Instructor:</strong> Mark Abramov</p>
+        <p><strong>Semester:</strong> Fall 2021</p>
+        <h3>About Me</h3>
+        <p >My name is Asif Talukder. Pursuing my Bachelore degree in Computer Science at Queens College. </p>
+        <h3>My Skills:</h3>
+        <ol>
+            <li>HTML & CSS</li>
+            <li>JavaScript</li>
+            <li>Node.js & Express.js</li>
+            <li>MongoBD & Mongoose</li>
+            <li>Git & Github</li>
+            <li>Java</li>
+            <li>Python</li>
+        </ol>
+
+    </div>
+    <div class="footer">
+        <h2>More Info</h2>
+        <a href="mailto:asif.talukder14@gmail.com">email me</a>
+        <a href="https://www.linkedin.com/in/asif-talukder-85b8b918a/" target="https://www.linkedin.com/in/asif-talukder-85b8b918a/">Visit my LinkedIn profile</a>
+
+    </div>
+
 
 </body>
 </html>
