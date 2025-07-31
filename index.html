@@ -2,101 +2,844 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>CS 355 Homepage</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asif | Pixel Engineer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-       body{
-    background-color: lightyellow;
-}
-h1{
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-    text-align: center;
-}
-h2{
-    text-align: center;
-    
-}
-
-.nav {
-    display: flex;
-    background-color:lightseagreen;
-}
-
-.nav a {
-    font-size: 20px;
-    text-align: center;
-    color: white;
-    float:left;
-    text-decoration: none;
-    padding: 10px 97.7px;
-    
-}
-.about-me p{
-    font-style: italic;
-}
-
-.nav a:hover {
-    background-color:slategray;
-    color: black;
-}
-
-.home-nav{
-    background-color: black;
-}
-.footer a{
-    text-decoration: none;
-    background: gold;
-    padding: 5px;
-    border-radius: 2px;
-
-}
-.footer a:hover{
-    background: lightseagreen;
-}
-.footer h2{
-    text-align: left;
-}
-
-
-            
-        
+        @keyframes scanline {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100vh); }
+        }
+        @keyframes flicker {
+            0% { opacity: 0.9; }
+            50% { opacity: 1; }
+            100% { opacity: 0.9; }
+        }
+        @keyframes pixelate {
+            0% { filter: blur(0.5px); }
+            50% { filter: blur(1px); }
+            100% { filter: blur(0.5px); }
+        }
+        .pixel-font {
+            font-family: 'Press Start 2P', cursive;
+        }
+        .crt-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        .crt-effect::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 4px;
+            z-index: 10;
+            pointer-events: none;
+        }
+        .scanline {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(0, 255, 0, 0.1);
+            animation: scanline 6s linear infinite;
+            z-index: 11;
+        }
+        .pixel-border {
+            border: 4px solid;
+            image-rendering: pixelated;
+        }
+        .pixel-box {
+            box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.3);
+        }
+        .pixel-box:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.3);
+        }
+        .pixel-progress {
+            height: 24px;
+            background-color: #333;
+            position: relative;
+            overflow: hidden;
+        }
+        .pixel-progress::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background-color: #0f0;
+            animation: flicker 2s infinite alternate;
+        }
+        .pixel-progress[data-value="90"]::after { width: 90%; background-color: #0f0; }
+        .pixel-progress[data-value="80"]::after { width: 80%; background-color: #9f0; }
+        .pixel-progress[data-value="70"]::after { width: 70%; background-color: #ff0; }
+        .pixel-progress[data-value="60"]::after { width: 60%; background-color: #f90; }
+        .pixel-progress[data-value="50"]::after { width: 50%; background-color: #f00; }
+        .pixel-avatar {
+            image-rendering: pixelated;
+            filter: drop-shadow(4px 4px 0 rgba(0, 0, 0, 0.3));
+            transition: all 0.3s ease;
+        }
+        .pixel-avatar:hover {
+            transform: scale(1.05) rotate(5deg);
+            filter: drop-shadow(6px 6px 0 rgba(0, 0, 0, 0.3));
+        }
+        .social-icon {
+            transition: all 0.3s ease;
+            filter: drop-shadow(2px 2px 0 rgba(0, 0, 0, 0.3));
+        }
+        .social-icon:hover {
+            transform: scale(1.2);
+            filter: drop-shadow(4px 4px 0 rgba(0, 0, 0, 0.3));
+        }
+        .project-card {
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+        }
+        .project-card:hover {
+            transform: perspective(1000px) rotateX(5deg) rotateY(5deg) scale(1.02);
+        }
+        .konami {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .konami canvas {
+            image-rendering: pixelated;
+            border: 4px solid #0f0;
+        }
+        .konami-close {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #0f0;
+            color: #000;
+            border: none;
+            font-family: 'Press Start 2P', cursive;
+            cursor: pointer;
+        }
+        .music-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(0, 255, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 100;
+            border: 2px solid #0f0;
+        }
+        .theme-toggle {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(0, 255, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 100;
+            border: 2px solid #0f0;
+        }
     </style>
 </head>
-<body>
-     <h1>CSCI 355 Dashboard</h1>
-     <div class = "nav">
-        <a class = "home-nav" href = "index.html">Home</a>
-        <a class = "project-nav" href = "/dashboard-html/projects.html">Projects</a> 
-       
-     </div>
-     <h2>Asif Talukder</h2>
+<body class="bg-gray-900 text-green-400 crt-effect min-h-screen overflow-x-hidden">
+<div class="scanline"></div>
 
-    <div class="about-me">
-        <h3>Welcome to my course website for CSCI 355!</h3>
-        <h4>Course Details:</h4>
-        <p><strong>Course Name:</strong> Internet and Web Technology</p>
-        <p><strong>Course Instructor:</strong> Mark Abramov</p>
-        <p><strong>Semester:</strong> Fall 2021</p>
-        <h3>About Me</h3>
-        <p >My name is Asif Talukder. Pursuing my Bachelore degree in Computer Science at Queens College. </p>
-        <h3>My Skills:</h3>
-        <ol>
-            <li>HTML & CSS</li>
-            <li>JavaScript</li>
-            <li>Node.js & Express.js</li>
-            <li>MongoDB & Mongoose</li>
-            <li>Git & Github</li>
-            <li>Java</li>
-            <li>Python</li>
-        </ol>
+<!-- Hidden Easter Egg -->
+<div class="konami">
+    <canvas id="gameCanvas" width="320" height="240"></canvas>
+    <button class="konami-close">CLOSE GAME</button>
+</div>
 
+<!-- Music Toggle -->
+<div class="music-toggle" id="musicToggle">
+    <i class="fas fa-music text-green-400"></i>
+</div>
+
+<!-- Theme Toggle -->
+<div class="theme-toggle" id="themeToggle">
+    <i class="fas fa-moon text-green-400" id="themeIcon"></i>
+</div>
+
+<!-- Navigation -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-gray-900 bg-opacity-90 backdrop-filter backdrop-blur-sm border-b border-green-400">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+        <a href="#home" class="pixel-font text-green-400 text-xl hover:text-pink-400 transition-colors">ASIF_TALUKDER</a>
+        <div class="hidden md:flex space-x-6">
+            <a href="#about" class="pixel-font text-sm text-green-400 hover:text-pink-400 transition-colors">ABOUT</a>
+            <a href="#projects" class="pixel-font text-sm text-green-400 hover:text-pink-400 transition-colors">PROJECTS</a>
+            <a href="#resume" class="pixel-font text-sm text-green-400 hover:text-pink-400 transition-colors">RESUME</a>
+            <a href="#contact" class="pixel-font text-sm text-green-400 hover:text-pink-400 transition-colors">CONTACT</a>
+        </div>
+        <button class="md:hidden text-green-400" id="mobileMenuButton">
+            <i class="fas fa-bars text-2xl"></i>
+        </button>
     </div>
-    <div class="footer">
-        <h2>More Info</h2>
-        <a href="mailto:asif.talukder14@gmail.com">email me</a>
-        <a href="https://www.linkedin.com/in/asif-talukder-85b8b918a/" target="https://www.linkedin.com/in/asif-talukder-85b8b918a/">Visit my LinkedIn profile</a>
-
+    <div class="md:hidden hidden bg-gray-800 px-4 py-2" id="mobileMenu">
+        <a href="#about" class="block pixel-font text-sm text-green-400 py-2 hover:text-pink-400 transition-colors">ABOUT</a>
+        <a href="#projects" class="block pixel-font text-sm text-green-400 py-2 hover:text-pink-400 transition-colors">PROJECTS</a>
+        <a href="#resume" class="block pixel-font text-sm text-green-400 py-2 hover:text-pink-400 transition-colors">RESUME</a>
+        <a href="#contact" class="block pixel-font text-sm text-green-400 py-2 hover:text-pink-400 transition-colors">CONTACT</a>
     </div>
+</nav>
 
+<!-- Home Section -->
+<section id="home" class="min-h-screen flex items-center justify-center pt-20">
+    <div class="container mx-auto px-4 py-20 flex flex-col md:flex-row items-center">
+        <div class="md:w-1/2 mb-10 md:mb-0 flex justify-center">
+            <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=Asif" alt="Pixel Avatar" class="w-64 h-64 pixel-avatar">
+        </div>
+        <div class="md:w-1/2 text-center md:text-left">
+            <h1 class="pixel-font text-3xl md:text-5xl text-green-400 mb-6">
+                HELLO, WORLD!<br>
+                I'M <span class="text-pink-400">ASIF</span>
+            </h1>
+            <p class="text-lg text-green-300 mb-8">
+                I'm a recent Computer Science grad from Queens College with a love for building things that are both fun and functional.
+                From game servers to web apps, I enjoy solving problems and adding creative flair.
+                I'm looking for opportunities where I can grow and make a real impact in software engineering.
+                Let's connect and create something awesome together.
+            </p>
+            <div class="flex space-x-4 justify-center md:justify-start">
+                <a href="#projects" class="pixel-font px-6 py-3 bg-pink-500 text-white hover:bg-pink-600 transition-colors pixel-box">
+                    VIEW WORK
+                </a>
+                <a href="#contact" class="pixel-font px-6 py-3 border-2 border-green-400 text-green-400 hover:bg-green-400 hover:text-gray-900 transition-colors pixel-box">
+                    CONTACT ME
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
 
+<!-- About Section -->
+<section id="about" class="py-20 bg-gray-800 bg-opacity-50">
+    <div class="container mx-auto px-4">
+        <h2 class="pixel-font text-3xl text-center text-green-400 mb-16">
+            <span class="text-pink-400">></span> ABOUT_ME <span class="text-pink-400"><</span>
+        </h2>
+
+        <div class="flex flex-col md:flex-row gap-10">
+            <div class="md:w-1/2">
+                <h3 class="pixel-font text-xl text-pink-400 mb-4">WHO AM I?</h3>
+                <p class="text-green-300 mb-6">
+                    I'm Asif, a passionate software engineering student with a love for all things digital. My journey began when I wrote my first "Hello World" program and I've been hooked ever since.
+                </p>
+                <p class="text-green-300 mb-6">
+                    My technical skill set includes Java, Python, C++, SQL, HTML/CSS, Node.js, and MongoDB, along with familiarity with tools and platforms such as Git, Docker, Kubernetes, and AWS.
+                    I’ve actively contributed to and led team-based projects utilizing Agile and Scrum methodologies, including developing a Connect4 game server and a
+                    full-stack online education platform.
+                </p>
+                <p class="text-green-300">
+                    My goal is to combine my technical skills with my creative side to build applications that stand out from the crowd while providing real value to users.
+                </p>
+            </div>
+
+            <div class="md:w-1/2">
+                <h3 class="pixel-font text-xl text-pink-400 mb-6">MY_SKILLS</h3>
+
+                <div class="space-y-6">
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-green-300">Java</span>
+                            <span class="text-green-400">85%</span>
+                        </div>
+                        <div class="pixel-progress" data-value="80"></div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-green-300">Python</span>
+                            <span class="text-green-400">80%</span>
+                        </div>
+                        <div class="pixel-progress" data-value="70"></div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-green-300">HTML & CSS</span>
+                            <span class="text-green-400">80%</span>
+                        </div>
+                        <div class="pixel-progress" data-value="70"></div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-green-300">Node.js</span>
+                            <span class="text-green-400">75%</span>
+                        </div>
+                        <div class="pixel-progress" data-value="75"></div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-green-300">Python</span>
+                            <span class="text-green-400">70%</span>
+                        </div>
+                        <div class="pixel-progress" data-value="70"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Projects Section -->
+<section id="projects" class="py-20">
+    <div class="container mx-auto px-4">
+        <h2 class="pixel-font text-3xl text-center text-green-400 mb-16">
+            <span class="text-pink-400">></span> MY_PROJECTS <span class="text-pink-400"><</span>
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Project 1 -->
+            <div class="bg-gray-800 p-6 rounded-lg project-card pixel-box">
+                <div class="bg-gray-700 h-48 flex items-center justify-center mb-4">
+                    <span class="text-5xl pixel-font text-pink-400">PXL</span>
+                </div>
+                <h3 class="pixel-font text-xl text-green-400 mb-2">Connect-4 Game Server</h3>
+                <p class="text-green-300 mb-4">
+                    A multiplayer console-based Connect-4 game using Java sockets and server-client architecture.
+                    Handle game logic and real time state updates between connected players.
+                </p>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="px-2 py-1 bg-pink-500 text-xs text-white">Java</span>
+                    <span class="px-2 py-1 bg-purple-500 text-xs text-white">SocketServer</span>
+                </div>
+                <a href="#" class="pixel-font text-sm text-green-400 hover:text-pink-400 transition-colors inline-flex items-center">
+                    VIEW PROJECT <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+
+            <!-- Project 2 -->
+            <div class="bg-gray-800 p-6 rounded-lg project-card pixel-box">
+                <div class="bg-gray-700 h-48 flex items-center justify-center mb-4">
+                    <span class="text-5xl pixel-font text-pink-400">DEV</span>
+                </div>
+                <h3 class="pixel-font text-xl text-green-400 mb-2">Online Movie Ticket Booking</h3>
+                <p class="text-green-300 mb-4">
+                    A Java based desktop app that let users browse and book movie tickets with an interactive UI.
+                    Built with JavaFx and design patterns,featuring real-time updates and notifications.
+                </p>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="px-2 py-1 bg-blue-500 text-xs text-white">Java</span>
+                    <span class="px-2 py-1 bg-yellow-500 text-xs text-white">JavaFx</span>
+                    <span class="px-2 py-1 bg-gray-500 text-xs text-white">GitHub</span>
+                </div>
+                <a href="#" class="pixel-font text-sm text-green-400 hover:text-pink-400 transition-colors inline-flex items-center">
+                    VIEW PROJECT <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+
+            <!-- Project 3 -->
+            <div class="bg-gray-800 p-6 rounded-lg project-card pixel-box">
+                <div class="bg-gray-700 h-48 flex items-center justify-center mb-4">
+                    <span class="text-5xl pixel-font text-pink-400">CHT</span>
+                </div>
+                <h3 class="pixel-font text-xl text-green-400 mb-2">Chalkboard: education platform </h3>
+                <p class="text-green-300 mb-4">
+                    A full-stack web platform where students can enroll in courses created by instructors. Build using
+                    Node.js, Express.js and MongoDB for the database.
+                </p>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="px-2 py-1 bg-green-500 text-xs text-white">HTML & CSS</span>
+                    <span class="px-2 py-1 bg-blue-500 text-xs text-white">JavaScript</span>
+                    <span class="px-2 py-1 bg-purple-500 text-xs text-white">MongoDB</span>
+                </div>
+                <a href="#" class="pixel-font text-sm text-green-400 hover:text-pink-400 transition-colors inline-flex items-center">
+                    VIEW PROJECT <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+
+            <!-- Project 4 -->
+            <div class="bg-gray-800 p-6 rounded-lg project-card pixel-box">
+                <div class="bg-gray-700 h-48 flex items-center justify-center mb-4">
+                    <span class="text-5xl pixel-font text-pink-400">ARC</span>
+                </div>
+                <h3 class="pixel-font text-xl text-green-400 mb-2">Archive Tool</h3>
+                <p class="text-green-300 mb-4">
+                    A web app that converts modern websites into retro-styled versions with pixel fonts and CRT effects.
+                </p>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="px-2 py-1 bg-blue-500 text-xs text-white">JavaScript</span>
+                    <span class="px-2 py-1 bg-red-500 text-xs text-white">CSS</span>
+                    <span class="px-2 py-1 bg-orange-500 text-xs text-white">HTML</span>
+                </div>
+                <a href="#" class="pixel-font text-sm text-green-400 hover:text-pink-400 transition-colors inline-flex items-center">
+                    VIEW PROJECT <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+
+            <!-- Project 5 -->
+
+            <!-- Project 6 -->
+</section>
+
+<!-- Resume Section -->
+<section id="resume" class="py-20 bg-gray-800 bg-opacity-50">
+    <div class="container mx-auto px-4">
+        <h2 class="pixel-font text-3xl text-center text-green-400 mb-16">
+            <span class="text-pink-400">></span> MY_RESUME <span class="text-pink-400"><</span>
+        </h2>
+
+        <div class="flex flex-col md:flex-row gap-10">
+            <div class="md:w-1/2">
+                <h3 class="pixel-font text-xl text-pink-400 mb-6">EXPERIENCE</h3>
+
+                <div class="space-y-8">
+                    <div class="bg-gray-900 p-6 rounded-lg pixel-box">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="pixel-font text-green-400">Junior Developer</h4>
+                            <span class="text-green-300 text-sm">2022 - Present</span>
+                        </div>
+                        <p class="text-pink-400 mb-2">RetroTech Solutions</p>
+                        <p class="text-green-300">
+                            Developed and maintained web applications with a focus on retro-inspired UI design. Collaborated with designers to implement pixel-perfect interfaces.
+                        </p>
+                    </div>
+
+                    <div class="bg-gray-900 p-6 rounded-lg pixel-box">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="pixel-font text-green-400">Intern</h4>
+                            <span class="text-green-300 text-sm">Summer 2021</span>
+                        </div>
+                        <p class="text-pink-400 mb-2">CodeArcade</p>
+                        <p class="text-green-300">
+                            Assisted in developing educational games with JavaScript. Learned about game development principles and responsive design.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="md:w-1/2">
+                <h3 class="pixel-font text-xl text-pink-400 mb-6">EDUCATION</h3>
+
+                <div class="bg-gray-900 p-6 rounded-lg pixel-box mb-8">
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="pixel-font text-green-400">BSc Computer Science</h4>
+                        <span class="text-green-300 text-sm">2019 - 2023</span>
+                    </div>
+                    <p class="text-pink-400 mb-2">CUNY Queens College</p>
+                    <p class="text-green-300">
+                        Relevant courswork including OOP, Data Structure & Algo, Database Systems, Software Engineering, Web Development, Cloud Computing, Natural
+                        Language Processing (NLP)
+                    </p>
+                </div>
+
+                <div class="bg-gray-900 p-6 rounded-lg pixel-box">
+                    <h4 class="pixel-font text-green-400 mb-4">DOWNLOAD_RESUME</h4>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="#" class="pixel-font px-6 py-3 bg-green-400 text-gray-900 hover:bg-green-500 transition-colors text-center pixel-box">
+                            PDF VERSION
+                        </a>
+                        <a href="#" class="pixel-font px-6 py-3 border-2 border-pink-400 text-pink-400 hover:bg-pink-400 hover:text-white transition-colors text-center pixel-box">
+                            TXT VERSION
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="py-20">
+    <div class="container mx-auto px-4">
+        <h2 class="pixel-font text-3xl text-center text-green-400 mb-16">
+            <span class="text-pink-400">></span> CONTACT_ME <span class="text-pink-400"><</span>
+        </h2>
+
+        <div class="flex flex-col md:flex-row gap-10">
+            <div class="md:w-1/2">
+                <form class="space-y-6">
+                    <div>
+                        <label for="name" class="block pixel-font text-sm text-green-400 mb-2">YOUR_NAME</label>
+                        <input type="text" id="name" class="w-full px-4 py-3 bg-gray-800 border-2 border-green-400 text-green-300 focus:outline-none focus:border-pink-400 transition-colors">
+                    </div>
+
+                    <div>
+                        <label for="email" class="block pixel-font text-sm text-green-400 mb-2">YOUR_EMAIL</label>
+                        <input type="email" id="email" class="w-full px-4 py-3 bg-gray-800 border-2 border-green-400 text-green-300 focus:outline-none focus:border-pink-400 transition-colors">
+                    </div>
+
+                    <div>
+                        <label for="message" class="block pixel-font text-sm text-green-400 mb-2">YOUR_MESSAGE</label>
+                        <textarea id="message" rows="5" class="w-full px-4 py-3 bg-gray-800 border-2 border-green-400 text-green-300 focus:outline-none focus:border-pink-400 transition-colors"></textarea>
+                    </div>
+
+                    <button type="submit" class="pixel-font px-8 py-4 bg-pink-500 text-white hover:bg-pink-600 transition-colors w-full pixel-box">
+                        SEND_MESSAGE
+                    </button>
+                </form>
+            </div>
+
+            <div class="md:w-1/2 flex flex-col justify-center">
+                <h3 class="pixel-font text-xl text-pink-400 mb-6">FIND_ME_ONLINE</h3>
+
+                <div class="grid grid-cols-3 gap-4 mb-10">
+                    <a href="#" class="bg-gray-800 p-4 rounded-lg flex flex-col items-center justify-center social-icon pixel-box h-32">
+                        <i class="fab fa-github text-4xl text-green-400 mb-2"></i>
+                        <span class="pixel-font text-xs text-green-400">GITHUB</span>
+                    </a>
+
+                    <a href="#" class="bg-gray-800 p-4 rounded-lg flex flex-col items-center justify-center social-icon pixel-box h-32">
+                        <i class="fab fa-linkedin-in text-4xl text-green-400 mb-2"></i>
+                        <span class="pixel-font text-xs text-green-400">LINKEDIN</span>
+                    </a>
+
+                    <a href="#" class="bg-gray-800 p-4 rounded-lg flex flex-col items-center justify-center social-icon pixel-box h-32">
+                        <i class="fab fa-twitter text-4xl text-green-400 mb-2"></i>
+                        <span class="pixel-font text-xs text-green-400">TWITTER</span>
+                    </a>
+
+                    <a href="#" class="bg-gray-800 p-4 rounded-lg flex flex-col items-center justify-center social-icon pixel-box h-32">
+                        <i class="fab fa-codepen text-4xl text-green-400 mb-2"></i>
+                        <span class="pixel-font text-xs text-green-400">CODEPEN</span>
+                    </a>
+
+                    <a href="#" class="bg-gray-800 p-4 rounded-lg flex flex-col items-center justify-center social-icon pixel-box h-32">
+                        <i class="fab fa-dev text-4xl text-green-400 mb-2"></i>
+                        <span class="pixel-font text-xs text-green-400">DEV.TO</span>
+                    </a>
+
+                    <a href="#" class="bg-gray-800 p-4 rounded-lg flex flex-col items-center justify-center social-icon pixel-box h-32">
+                        <i class="fas fa-envelope text-4xl text-green-400 mb-2"></i>
+                        <span class="pixel-font text-xs text-green-400">EMAIL</span>
+                    </a>
+                </div>
+
+                <div class="bg-gray-800 p-6 rounded-lg pixel-box">
+                    <h4 class="pixel-font text-green-400 mb-4">OR_SEND_A_CARRIER_PIGEON</h4>
+                    <p class="text-green-300">
+                        123 Pixel Lane<br>
+                        Retro City, RC 10101<br>
+                        Digital District
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-gray-900 py-10 border-t border-green-400">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-6 md:mb-0">
+                <p class="pixel-font text-green-400">
+                    ASIF_DEV © 2023
+                </p>
+            </div>
+
+            <div class="flex space-x-6">
+                <a href="#" class="text-green-400 hover:text-pink-400 transition-colors">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="#" class="text-green-400 hover:text-pink-400 transition-colors">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="#" class="text-green-400 hover:text-pink-400 transition-colors">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#" class="text-green-400 hover:text-pink-400 transition-colors">
+                    <i class="fab fa-codepen"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="mt-10 text-center">
+            <p class="text-green-300 text-sm">
+                Made with <i class="fas fa-heart text-pink-400"></i> and <i class="fas fa-coffee text-yellow-400"></i> using HTML, CSS, and JavaScript
+            </p>
+            <p class="text-green-300 text-xs mt-2">
+                Try the Konami Code for a surprise! ↑↑↓↓←→←→BA
+            </p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Mobile menu toggle
+    document.getElementById('mobileMenuButton').addEventListener('click', function() {
+        const menu = document.getElementById('mobileMenu');
+        menu.classList.toggle('hidden');
+    });
+
+    // Theme toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    let isDark = true;
+
+    themeToggle.addEventListener('click', function() {
+        isDark = !isDark;
+        if (isDark) {
+            document.documentElement.classList.add('dark');
+            themeIcon.classList.remove('fa-sun');
+            themeIcon.classList.add('fa-moon');
+        } else {
+            document.documentElement.classList.remove('dark');
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        }
+    });
+
+    // Music toggle placeholder
+    document.getElementById('musicToggle').addEventListener('click', function() {
+        alert('8-bit chiptune music would play here!');
+    });
+
+    // Konami Code Easter Egg
+    const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+    let konamiIndex = 0;
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === konamiCode[konamiIndex]) {
+            konamiIndex++;
+            if (konamiIndex === konamiCode.length) {
+                activateKonami();
+                konamiIndex = 0;
+            }
+        } else {
+            konamiIndex = 0;
+        }
+    });
+
+    function activateKonami() {
+        const konami = document.querySelector('.konami');
+        konami.style.display = 'flex';
+
+        // Simple game canvas
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Game variables
+        let x = canvas.width / 2;
+        let y = canvas.height / 2;
+        let dx = 2;
+        let dy = -2;
+        const ballRadius = 10;
+
+        // Paddle variables
+        const paddleHeight = 10;
+        const paddleWidth = 75;
+        let paddleX = (canvas.width - paddleWidth) / 2;
+        let rightPressed = false;
+        let leftPressed = false;
+
+        // Brick variables
+        const brickRowCount = 3;
+        const brickColumnCount = 5;
+        const brickWidth = 75;
+        const brickHeight = 20;
+        const brickPadding = 10;
+        const brickOffsetTop = 30;
+        const brickOffsetLeft = 30;
+
+        // Create bricks
+        const bricks = [];
+        for (let c = 0; c < brickColumnCount; c++) {
+            bricks[c] = [];
+            for (let r = 0; r < brickRowCount; r++) {
+                bricks[c][r] = { x: 0, y: 0, status: 1 };
+            }
+        }
+
+        // Score
+        let score = 0;
+
+        // Lives
+        let lives = 3;
+
+        // Event listeners for paddle
+        document.addEventListener('keydown', keyDownHandler);
+        document.addEventListener('keyup', keyUpHandler);
+
+        function keyDownHandler(e) {
+            if (e.key === 'Right' || e.key === 'ArrowRight') {
+                rightPressed = true;
+            } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
+                leftPressed = true;
+            }
+        }
+
+        function keyUpHandler(e) {
+            if (e.key === 'Right' || e.key === 'ArrowRight') {
+                rightPressed = false;
+            } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
+                leftPressed = false;
+            }
+        }
+
+        // Collision detection
+        function collisionDetection() {
+            for (let c = 0; c < brickColumnCount; c++) {
+                for (let r = 0; r < brickRowCount; r++) {
+                    const brick = bricks[c][r];
+                    if (brick.status === 1) {
+                        if (
+                            x > brick.x &&
+                            x < brick.x + brickWidth &&
+                            y > brick.y &&
+                            y < brick.y + brickHeight
+                        ) {
+                            dy = -dy;
+                            brick.status = 0;
+                            score++;
+                            if (score === brickRowCount * brickColumnCount) {
+                                alert('YOU WIN, CONGRATS!');
+                                document.location.reload();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Draw ball
+        function drawBall() {
+            ctx.beginPath();
+            ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
+            ctx.fillStyle = '#0f0';
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        // Draw paddle
+        function drawPaddle() {
+            ctx.beginPath();
+            ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+            ctx.fillStyle = '#f0f';
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        // Draw bricks
+        function drawBricks() {
+            for (let c = 0; c < brickColumnCount; c++) {
+                for (let r = 0; r < brickRowCount; r++) {
+                    if (bricks[c][r].status === 1) {
+                        const brickX = c * (brickWidth + brickPadding) + brickOffsetLeft;
+                        const brickY = r * (brickHeight + brickPadding) + brickOffsetTop;
+                        bricks[c][r].x = brickX;
+                        bricks[c][r].y = brickY;
+                        ctx.beginPath();
+                        ctx.rect(brickX, brickY, brickWidth, brickHeight);
+                        ctx.fillStyle = '#00f';
+                        ctx.fill();
+                        ctx.closePath();
+                    }
+                }
+            }
+        }
+
+        // Draw score
+        function drawScore() {
+            ctx.font = '16px "Press Start 2P"';
+            ctx.fillStyle = '#0f0';
+            ctx.fillText('Score: ' + score, 8, 20);
+        }
+
+        // Draw lives
+        function drawLives() {
+            ctx.font = '16px "Press Start 2P"';
+            ctx.fillStyle = '#0f0';
+            ctx.fillText('Lives: ' + lives, canvas.width - 120, 20);
+        }
+
+        // Main draw function
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBricks();
+            drawBall();
+            drawPaddle();
+            collisionDetection();
+            drawScore();
+            drawLives();
+
+            // Bounce off walls
+            if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
+                dx = -dx;
+            }
+
+            if (y + dy < ballRadius) {
+                dy = -dy;
+            } else if (y + dy > canvas.height - ballRadius) {
+                if (x > paddleX && x < paddleX + paddleWidth) {
+                    dy = -dy;
+                } else {
+                    lives--;
+                    if (!lives) {
+                        alert('GAME OVER');
+                        document.location.reload();
+                    } else {
+                        x = canvas.width / 2;
+                        y = canvas.height / 2;
+                        dx = 2;
+                        dy = -2;
+                        paddleX = (canvas.width - paddleWidth) / 2;
+                    }
+                }
+            }
+
+            // Move paddle
+            if (rightPressed && paddleX < canvas.width - paddleWidth) {
+                paddleX += 7;
+            } else if (leftPressed && paddleX > 0) {
+                paddleX -= 7;
+            }
+
+            x += dx;
+            y += dy;
+
+            requestAnimationFrame(draw);
+        }
+
+        // Close button
+        document.querySelector('.konami-close').addEventListener('click', function() {
+            konami.style.display = 'none';
+        });
+
+        draw();
+    }
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+
+            // Close mobile menu if open
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (!mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+            }
+        });
+    });
+</script>
 </body>
 </html>
